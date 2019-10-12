@@ -1,2 +1,2 @@
 # projeto
-Projeto de software embarcado
+projeto de software embarcados
