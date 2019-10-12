@@ -1,7 +1,7 @@
 # Projeto
 Projeto de Software Embarcado.
 
-### Descrição
+## Descrição
 
 O projeto visa facilitar o gerenciamento de estoque de produtos. Será possível gerenciar o banco de dados de produtos.
 
@@ -18,7 +18,19 @@ as informações do produto. Caso o botão seja pressionado, o produto será exc
 | -------------------------------- | ------------- |
 | Arduino Mega 2560                                      | 1 |
 | Arduino UNO                                            | 1 |
-| Modulo Wireless NRF24l01 2.4ghz - Comunicação Sem Fio  |  para cada arduino |
+| Modulo Wireless NRF24l01 2.4ghz - Comunicação Sem Fio  |  2 |
 | Arduino LCD Shield                                     | 1 |
-| Kit Leitor RFID RC522                                  | para cada arduino |
+| Kit Leitor RFID RC522                                  | 3 |
 | Botão táctil                                           | 1 |
+
+## Máquina de estados
+
+<img src="maquina_de_estados.png">
+
+### Definições
+
+| **Nome** | **Descrição** |
+| --- | --- |
+| **B1** | Apertar o botão |
+| **Ler RFID** | Leitura de uma id de um cartão em um sensor RFID |
+| **INSERT/DELETE/SELECT ID** | Execução do comando sql especificado no banco de dados |
