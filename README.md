@@ -25,7 +25,7 @@ as informações do produto. Caso o botão seja pressionado, o produto será exc
 
 ## Máquina de estados
 
-<img src="maquina_de_estados.png">
+<img src="maquina_de_estados.PNG">
 
 ### Definições
 
