@@ -38,5 +38,6 @@ Teremos também a opção de voltar para o modo de consulta.
 ### Participantes
 
 | **Nome** | **Usuário** | **Atribuição** |
+| --- | --- | --- |
 | Igor Sousa Silva | @siebtel | Arduino 2 |
 | Vinicius Sathler | @sathler | Arduino 1 |
