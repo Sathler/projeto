@@ -1,7 +1,7 @@
 <?php include 'conexao.php' ; 
 session_start();
 $port = fopen("/dev/ttyACM0", "r");
-//sleep(3);
+sleep(3);
 
 ?>
 <html>
