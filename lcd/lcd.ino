@@ -26,5 +26,5 @@ void loop(){
  }  
  else if ((analogRead(0)) < 800){ //SE A LEITURA DO PINO FOR MENOR QUE 800, FAZ 
   lcd.print ("     SELECT    "); //ESCREVE NO LCD O TEXTO 
- }  
+ }
 }
