@@ -24,3 +24,29 @@ void loop() {
     Serial.println(text);
   }
 }
+/*
+ * #include <SPI.h>
+#include <RF24.h>
+
+RF24 radio(7, 8); // CE, CSN Pode ser qualquer porta digital
+//const byte endereco[][6] = {0xF0F0F0F0AA, 0xF0F0F0F066};
+void setup() {
+  Serial.begin(9600);
+  radio.begin();
+  //define o pipe de escrita
+  radio.openWritingPipe(0xF0F0F0F0AA);
+  //define o pipe de leitura
+  radio.openReadingPipe(1, 0xF0F0F0F066);
+
+  radio.startListening();
+}
+void loop() {
+ // Serial.println(radio.available());
+  if (radio.available()) {
+    char text[20] = "";
+    radio.read(&text, sizeof(&text));
+    Serial.println(text);
+  }
+}
+
+ */
