@@ -14,10 +14,13 @@ while 1:
     if s != b'':
         tag = s.decode()
         if tag[0] == 'I':
-            ins = mySql_insert_query + tag[1:] + "\");"
-            result = cursor.execute(ins)
-            connection.commit()
-            print(tag[1:] + " registrado com sucesso.")
+            try:
+                ins = mySql_insert_query + tag[1:] + "\");"
+                result = cursor.execute(ins)
+                connection.commit()
+                print(tag[1:] + " registrado com sucesso.")
+            except mysql.connector.IntegrityError as err:
+                print("Erro: Tag " + tag[1:] + " ja esta cadastrada")
         elif tag[0] == 'R':
             rem = mySql_delete_query + tag[1:] + "\""
             result = cursor.execute(rem)
@@ -27,6 +30,9 @@ while 1:
             sel = mySql_select_query + tag[1:] + "\""
             cursor.execute(sel)
             record = cursor.fetchall()
-            for row in record:
-                print("Tag: ", row[0])
+            if len(record) == 0:
+                print("Produto nao cadastrado.")
+            else:
+                for row in record:
+                    print("Tag: ", row[0])
 ser.close()
