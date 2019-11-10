@@ -21,7 +21,7 @@ Teremos também a opção de voltar para o modo de consulta.
 | Arduino UNO                                            | 1 |
 | Modulo Wireless NRF24l01 2.4ghz - Comunicação Sem Fio  | 2 |
 | Arduino LCD Shield                                     | 1 |
-| Kit Leitor RFID RC522                                  | 3 |
+| Kit Leitor RFID RC522                                  | 2 |
 
 ## Máquina de estados
 
