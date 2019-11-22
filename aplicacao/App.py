@@ -2,12 +2,12 @@ import serial
 import time
 import mysql.connector
 from mysql.connector import Error
-ser = serial.Serial('COM6', 9600, timeout=0)
-connection = mysql.connector.connect(host='localhost', database='dbSE', user='root',password='')
+ser = serial.Serial('/dev/ttyACM0', 9600, timeout=0)
+connection = mysql.connector.connect(host='localhost', database='dbSE', user='root',password='root')
 cursor = connection.cursor()
 mySql_insert_query = "INSERT INTO Produtos VALUES (\""
 mySql_delete_query = "DELETE FROM Produtos WHERE Tag = \""
-mySql_select_query = "SELECT * FROM PRODUTOS WHERE Tag = \""
+mySql_select_query = "SELECT * FROM Produtos WHERE Tag = \""
 while 1:
     time.sleep(2)
     s = ser.readline()
@@ -18,21 +18,30 @@ while 1:
                 ins = mySql_insert_query + tag[1:] + "\");"
                 result = cursor.execute(ins)
                 connection.commit()
-                print(tag[1:] + " registrado com sucesso.")
+                ret = tag[1:] + " cadastrado com sucesso."	
+                print(ret)
             except mysql.connector.IntegrityError as err:
-                print("Erro: Tag " + tag[1:] + " ja esta cadastrada")
+            	ret = "Erro: Tag " + tag[1:] + " ja esta cadastrada"
+            	print(ret)
         elif tag[0] == 'R':
             rem = mySql_delete_query + tag[1:] + "\""
             result = cursor.execute(rem)
             connection.commit()
-            print(tag[1:] + " removido com sucesso.")
+            ret = tag[1:] + " removido com sucesso."
+            print(ret)
+            ser.write(ret.encode())
         elif tag[0] == 'S':
             sel = mySql_select_query + tag[1:] + "\""
             cursor.execute(sel)
             record = cursor.fetchall()
             if len(record) == 0:
-                print("Produto nao cadastrado.")
+            	ret = "Produto nao cadastrado."
+            	print(ret)
+            	ser.write(ret.encode())
             else:
                 for row in record:
-                    print("Tag: ", row[0])
+                	ret = "Tag: " + row[0]
+                	print(ret)
+                	ser.write(ret.encode())   
+					
 ser.close()
