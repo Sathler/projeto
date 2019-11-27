@@ -2,6 +2,5 @@ CREATE DATABASE dbSE;
 
 USE dbSE;
 
-CREATE TABLE Produtos (
-  Tag VARCHAR(8) NOT NULL PRIMARY KEY
-);
+create table Produtos(Tag VARCHAR(8) PRIMARY KEY, Nome VARCHAR(45) NOT NULL, Valor INT NOT NULL);
+
