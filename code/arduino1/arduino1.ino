@@ -8,10 +8,10 @@
 
 MFRC522 rfid(SS_PIN, RST_PIN); //PASSAGEM DE PARÂMETROS REFERENTE AOS PINOS
 
-RF24 radio(7, 8); //CRIA UMA INSTÂNCIA UTILIZANDO OS PINOS (CE, CSN)
+RF24 radio(5, 6); //CRIA UMA INSTÂNCIA UTILIZANDO OS PINOS (CE, CSN)
 
-const byte address[6] = "00002"; //CRIA UM ENDEREÇO PARA ENVIO DOS
-const byte address2[6] = "00001";
+const byte address[6] = "00005"; //CRIA UM ENDEREÇO PARA ENVIO DOS
+const byte address2[6] = "00004";
 //DADOS (O TRANSMISSOR E O RECEPTOR DEVEM SER CONFIGURADOS COM O MESMO ENDEREÇO)
 
 void setup() {
@@ -30,23 +30,24 @@ void loop() {
     char text[32] = ""; //VARIÁVEL RESPONSÁVEL POR ARMAZENAR OS DADOS RECEBIDOS
     radio.read(&text, sizeof(text)); //LÊ OS DADOS RECEBIDOS
     String tag = String(text);
-    //tag = "S" + tag;
-    Serial.print(tag); //IMPRIME NA SERIAL OS DADOS RECEBIDOS
-    while(Serial.available() == 0){}
-    String ret = "";
-    char c;
-    while(Serial.available() > 0){
-      c = Serial.read();
-      if(c != '\n'){
-        ret += c;
+    if(!tag.equals("")){
+      Serial.print(tag); //IMPRIME NA SERIAL OS DADOS RECEBIDOS
+      while(Serial.available() == 0){}
+      String ret = "";
+      char c;
+      while(Serial.available() > 0){
+        c = Serial.read();
+        if(c != '\n'){
+          ret += c;
+        }
+        delay(10);
       }
-      delay(10);
+      radio.stopListening();
+      char *retCStr = ret.c_str();
+      radio.write(retCStr, ret.length());
+      
+      radio.startListening();
     }
-    radio.stopListening();
-    char *retCStr = ret.c_str();
-    radio.write(retCStr, ret.length());
-    
-    radio.startListening();
   }
   
   if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) //VERIFICA SE O CARTÃO PRESENTE NO LEITOR É DIFERENTE DO ÚLTIMO CARTÃO LIDO. CASO NÃO SEJA, FAZ
@@ -63,8 +64,4 @@ void loop() {
   rfid.PICC_HaltA(); //PARADA DA LEITURA DO CARTÃO
   rfid.PCD_StopCrypto1(); //PARADA DA CRIPTOGRAFIA NO PCD
   Serial.print(strID); //IMPRIME NA SERIAL O UID DA TAG RFID
-
-  
-  
-  
 }
