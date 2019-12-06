@@ -41,3 +41,11 @@ Teremos também a opção de voltar para o modo de consulta.
 | --- | --- | --- |
 | Igor Sousa Silva | @siebtel | Arduino 2 |
 | Vinicius Sathler | @sathler | Arduino 1 |
+
+### Video do projeto
+
+<!--https://www.youtube.com/watch?v=sBDunko1ffY-->
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=sBDunko1ffY
+" target="_blank"><img src="http://img.youtube.com/vi/sBDunko1ffY/0.jpg" 
+alt="ProjetoSE" width="240" height="180" border="10" /></a>
