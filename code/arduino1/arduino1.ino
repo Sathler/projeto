@@ -1,67 +1,83 @@
-#include <SPI.h> //INCLUSÃO DE BIBLIOTECA
-#include <nRF24L01.h> //INCLUSÃO DE BIBLIOTECA
-#include <RF24.h> //INCLUSÃO DE BIBLIOTECA
-#include <MFRC522.h> //INCLUSÃO DE BIBLIOTECA
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
+#include <MFRC522.h>
 
-#define SS_PIN 10 //PINO SDA
-#define RST_PIN 9 //PINO DE RESET
+#define SS_PIN 10
+#define RST_PIN 9
+#define CE_PIN 5
+#define CSN_PIN 6
 
-MFRC522 rfid(SS_PIN, RST_PIN); //PASSAGEM DE PARÂMETROS REFERENTE AOS PINOS
+MFRC522 rfid(SS_PIN, RST_PIN);
+RF24 radio(CE_PIN, CSN_PIN);
 
-RF24 radio(5, 6); //CRIA UMA INSTÂNCIA UTILIZANDO OS PINOS (CE, CSN)
+const byte reading_address[6] = "00005";
+const byte writing_address[6] = "00004";
 
-const byte address[6] = "00005"; //CRIA UM ENDEREÇO PARA ENVIO DOS
-const byte address2[6] = "00004";
-//DADOS (O TRANSMISSOR E O RECEPTOR DEVEM SER CONFIGURADOS COM O MESMO ENDEREÇO)
-
-void setup() {
-  Serial.begin(9600); //INICIALIZA A SERIAL
-  SPI.begin(); //INICIALIZA O BARRAMENTO SPI
-  rfid.PCD_Init(); //INICIALIZA MFRC522
-  radio.begin(); //INICIALIZA A COMUNICAÇÃO SEM FIO
-  radio.openReadingPipe(0, address); //DEFINE O ENDEREÇO PARA RECEBIMENTO DE DADOS VINDOS DO TRANSMISSOR
-  radio.openWritingPipe(address2);
+void setup()
+{
+  Serial.begin(9600);
+  SPI.begin();
+  rfid.PCD_Init();
+  radio.begin();
+  radio.openReadingPipe(0, reading_address);
+  radio.openWritingPipe(writing_address);
   radio.setPALevel(RF24_PA_HIGH); //DEFINE O NÍVEL DO AMPLIFICADOR DE POTÊNCIA
-  radio.startListening(); //DEFINE O MÓDULO COMO RECEPTOR (NÃO ENVIA DADOS)
+  radio.startListening();
 }
 
-void loop() {
-  if (radio.available()) { //SE A COMUNICAÇÃO ESTIVER HABILITADA, FAZ
-    char text[32] = ""; //VARIÁVEL RESPONSÁVEL POR ARMAZENAR OS DADOS RECEBIDOS
-    radio.read(&text, sizeof(text)); //LÊ OS DADOS RECEBIDOS
+void loop()
+{
+  if (radio.available()) //RECEBENDO UMA MENSAGEM VIA RADIO 
+  {
+    char text[32] = "";
+    radio.read(&text, sizeof(text));
     String tag = String(text);
-    if(!tag.equals("")){
-      Serial.print(tag); //IMPRIME NA SERIAL OS DADOS RECEBIDOS
-      while(Serial.available() == 0){}
+    if (!tag.equals(""))
+    {
+      Serial.print(tag); //ENVIA A MENSAGEM PARA A APLICAÇÃO VIA PORTA SERIAL
+      while (Serial.available() == 0) //ENQUANTO A APLICAÇÃO NÃO RESPONDER O PROGRAMA
+      {                               //FICARA EM ESTADO DE ESPERA NESTE BLOCO
+      }
       String ret = "";
       char c;
-      while(Serial.available() > 0){
+      //BLOCO QUE REALIZA A LEITURA DA PORTA SERIAL
+      while (Serial.available() > 0) 
+      {
         c = Serial.read();
-        if(c != '\n'){
+        if (c != '\n')
+        {
           ret += c;
         }
         delay(10);
       }
+
+      //ENVIANDO O RETORNO DA APLICAÇÃO PARA O ARDUINO REMOTO
       radio.stopListening();
       char *retCStr = ret.c_str();
       radio.write(retCStr, ret.length());
-      
       radio.startListening();
     }
   }
+
+  if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) //RETORNA PARA O INICIO DO LOOP ENQUANTO NÃO LER UM CARTAO
+    return;                                                         
   
-  if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) //VERIFICA SE O CARTÃO PRESENTE NO LEITOR É DIFERENTE DO ÚLTIMO CARTÃO LIDO. CASO NÃO SEJA, FAZ
-  return; //RETORNA PARA LER NOVAMENTE
-  /***INICIO BLOCO DE CÓDIGO RESPONSÁVEL POR GERAR A TAG RFID LIDA***/
   String strID = "I";
-  for (byte i = 0; i < 4; i++) {
+  for (byte i = 0; i < 4; i++)
+  {
     strID +=
-    (rfid.uid.uidByte[i] < 0x10 ? "0" : "") +
-    String(rfid.uid.uidByte[i], HEX);
+        (rfid.uid.uidByte[i] < 0x10 ? "0" : "") +
+        String(rfid.uid.uidByte[i], HEX);
   }
   strID.toUpperCase();
-  /***FIM DO BLOCO DE CÓDIGO RESPONSÁVEL POR GERAR A TAG RFID LIDA***/
-  rfid.PICC_HaltA(); //PARADA DA LEITURA DO CARTÃO
-  rfid.PCD_StopCrypto1(); //PARADA DA CRIPTOGRAFIA NO PCD
-  Serial.print(strID); //IMPRIME NA SERIAL O UID DA TAG RFID
+  
+  rfid.PICC_HaltA();      
+  rfid.PCD_StopCrypto1(); 
+  Serial.print(strID); //ENVIANDO TAG PARA CADASTRO NA APLICACÃO   
 }
+
+//TODO COMANDO ENVIADO POR ESTA UNIDADE PARA A APLCIAÇÃO ESTARA NO FORMATO
+// C + TAG, ONDE C É UM CARACTERE QUE REPRESENTA A INSTRUÇÃO SQL A SER REALIZADA
+//PELA APLICAÇÃO, 'I' PARA CADASTRO, 'S' PARA CONSULTA e 'R' PARA REMOÇÃO
+//E A TAG SENDO FORMADA POR OITO CARACTERES ALFA-NUMÉRICOS, TODOS EM UPPER CASE
