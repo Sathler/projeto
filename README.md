@@ -5,12 +5,15 @@ Projeto de Software Embarcado.
 
 O projeto visa facilitar o gerenciamento de estoque de produtos. Será possível gerenciar o banco de dados de produtos.
 
-Iremos usar um identificador e associá-lo ao produto para cadastrar no banco de dados.
-Usaremos um arduino, com o leitor, conectado ao computador para ler o identificador.
-O gerenciamento será com um outro arduino (móvel) o qual terá o leitor e shield LCD que tem botões integrados. Quando lermos o identificador de um produto, o LCD conectado ao arduino exibirá
-as informações do produto. Caso um botão seja pressionado, o arduino entrará no modo de exclusão de produto, podendo assim excluir o produto, se comunicando com o arduino conectado ao computador.
-Teremos também a opção de voltar para o modo de consulta.
+O sistema realiza o gerenciamento de um banco de dados local através da leitura de uma tag que foi associada a cada produto.
 
+Primeiro foi desenvolvida uma aplicação em Python, responsável por receber e interpretar mensagens de um microcontrolador arduino via porta serial, executar comandos sql em um banco de dados local, e enviar mensagens com o resultado de tais operações de volta ao microcontrolador também através de uma porta serial.
+
+Este microcontrolador arduino responsável pela comunicação com a aplicação, também chamado de arduino 1, possui duas funções, a primeira é realizar leitura de tags via um leitor RFID e enviar uma requisição de cadastro um novo produto para a aplicação, a segunda é receber uma mensagem de um microcontrolador arduino secundário via transmissão a rádio, retransmiti-la para a aplicação, receber a resposta e repassar ao microcontrolador arduino secundário.
+
+Por fim, o arduino secundário, também chamado de arduino 2, é capaz de gerar mensagens que a aplicação interpreta como requisições de remoção e consulta, enviar para o arduino primário, receber uma mensagem de confirmação, decodificá-la e por fim exibir em uma tela lcd acoplada ao sistema.
+
+Os códigos estão disponíveis neste repositório, assim como os diagramas de montagem e de máquina de estados.
 
 ## Componentes
 
@@ -25,15 +28,20 @@ Teremos também a opção de voltar para o modo de consulta.
 
 ## Máquina de estados
 
-<img src="maquina_de_estados.PNG">
+### Arduino 1
+
+<img src="model/MEArduino1.png">
+
+### Arduino 2
+
+<img src="model/MEArduino2.png">
 
 ### Definições
 
 | **Nome** | **Descrição** |
 | --- | --- |
-| **B1** | Apertar o botão |
-| **Ler RFID** | Leitura de uma id de um cartão em um sensor RFID |
-| **INSERT/DELETE/SELECT ID** | Execução do comando sql especificado no banco de dados |
+| **B1** | Apertar o botão 1|
+| **B2** | Apertar o botão 2|
 
 ## Participantes
 
@@ -48,6 +56,10 @@ Teremos também a opção de voltar para o modo de consulta.
 ### Arduino 1
 
 <img src="model/arduino1sketch.png">
+
+### Arduino 2
+
+<img src="model/arduino2sketch.png">
 
 ## Video do projeto
 
