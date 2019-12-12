@@ -35,14 +35,21 @@ Teremos também a opção de voltar para o modo de consulta.
 | **Ler RFID** | Leitura de uma id de um cartão em um sensor RFID |
 | **INSERT/DELETE/SELECT ID** | Execução do comando sql especificado no banco de dados |
 
-### Participantes
+## Participantes
 
 | **Nome** | **Usuário** | **Atribuição** |
 | --- | --- | --- |
 | Igor Sousa Silva | @siebtel | Arduino 2 |
 | Vinicius Sathler | @sathler | Arduino 1 |
 
-### Video do projeto
+
+## Esquema de montagem
+
+### Arduino 1
+
+<img src="model/arduino1sketch.png">
+
+## Video do projeto
 
 <!--https://www.youtube.com/watch?v=sBDunko1ffY-->
 
