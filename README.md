@@ -7,9 +7,9 @@ O projeto visa facilitar o gerenciamento de estoque de produtos. Será possível
 
 O sistema realiza o gerenciamento de um banco de dados local através da leitura de uma tag que foi associada a cada produto.
 
-Primeiro foi desenvolvida uma aplicação em Python, responsável por receber e interpretar mensagens de um microcontrolador arduino via porta serial, executar comandos sql em um banco de dados local, e enviar mensagens com o resultado de tais operações de volta ao microcontrolador também através de uma porta serial.
+Primeiro foi desenvolvida uma aplicação em Python  responsável por receber e interpretar mensagens de um microcontrolador arduino via porta serial, executar comandos sql em um banco de dados local e enviar mensagens com o resultado de tais operações de volta ao microcontrolador também através de uma porta serial.
 
-Este microcontrolador arduino responsável pela comunicação com a aplicação, também chamado de arduino 1, possui duas funções, a primeira é realizar leitura de tags via um leitor RFID e enviar uma requisição de cadastro um novo produto para a aplicação, a segunda é receber uma mensagem de um microcontrolador arduino secundário via transmissão a rádio, retransmiti-la para a aplicação, receber a resposta e repassar ao microcontrolador arduino secundário.
+O microcontrolador arduino primário, também chamado de arduino 1, possui duas funções. A primeira é realizar leitura de tags via um leitor RFID e enviar uma requisição de cadastro um novo produto para a aplicação. A segunda é receber uma mensagem de um microcontrolador arduino secundário via transmissão a rádio, retransmiti-la para a aplicação, receber a resposta e repassar ao microcontrolador arduino secundário.
 
 Por fim, o arduino secundário, também chamado de arduino 2, é capaz de gerar mensagens que a aplicação interpreta como requisições de remoção e consulta, enviar para o arduino primário, receber uma mensagem de confirmação, decodificá-la e por fim exibir em uma tela lcd acoplada ao sistema.
 
